@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Package Version="4">
+    <Name Value="RSQL_Package"/>
+    <Type Value="RunAndDesignTime"/>
+    <CompilerOptions>
+      <Version Value="11"/>
+      <SearchPaths>
+        <OtherUnitFiles Value="source"/>
+        <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
+      </SearchPaths>
+    </CompilerOptions>
+    <Version Minor="1" Release="1" Build="1"/>
+    <Files Count="11">
+      <Item1>
+        <Filename Value="source/rsql_helper.pas"/>
+        <UnitName Value="RSQL_Helper"/>
+      </Item1>
+      <Item2>
+        <Filename Value="source/rsql_crypto_hmac.pas"/>
+        <UnitName Value="RSQL_Crypto_HMAC"/>
+      </Item2>
+      <Item3>
+        <Filename Value="source/rsql_crypto_base64.pas"/>
+        <UnitName Value="RSQL_Crypto_BASE64"/>
+      </Item3>
+      <Item4>
+        <Filename Value="source/rsql_crypto_jwt.pas"/>
+        <UnitName Value="RSQL_Crypto_JWT"/>
+      </Item4>
+      <Item5>
+        <Filename Value="source/rsql_server_database.pas"/>
+        <UnitName Value="RSQL_Server_Database"/>
+      </Item5>
+      <Item6>
+        <Filename Value="source/rsql_server_transaction.pas"/>
+        <UnitName Value="RSQL_Server_Transaction"/>
+      </Item6>
+      <Item7>
+        <Filename Value="source/rsql_server_router.pas"/>
+        <UnitName Value="RSQL_Server_Router"/>
+      </Item7>
+      <Item8>
+        <Filename Value="source/rsql_server_component.pas"/>
+        <UnitName Value="RSQL_Server_Component"/>
+      </Item8>
+      <Item9>
+        <Filename Value="source/rsql_server_application.pas"/>
+        <UnitName Value="RSQL_Server_Application"/>
+      </Item9>
+      <Item10>
+        <Filename Value="source/rsql_client_connection.pas"/>
+        <UnitName Value="RSQL_Client_Connection"/>
+      </Item10>
+      <Item11>
+        <Filename Value="source/rsql_register.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="RSQL_Register"/>
+      </Item11>
+    </Files>
+    <RequiredPkgs Count="2">
+      <Item1>
+        <PackageName Value="IDEIntf"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="FCL"/>
+      </Item2>
+    </RequiredPkgs>
+    <UsageOptions>
+      <UnitPath Value="$(PkgOutDir)"/>
+    </UsageOptions>
+    <PublishOptions>
+      <Version Value="2"/>
+      <UseFileFilters Value="True"/>
+    </PublishOptions>
+  </Package>
+</CONFIG>
