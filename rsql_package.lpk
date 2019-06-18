@@ -10,8 +10,8 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Version Minor="1" Release="1" Build="1"/>
-    <Files Count="11">
+    <Version Minor="1" Release="1" Build="2"/>
+    <Files Count="12">
       <Item1>
         <Filename Value="source/rsql_helper.pas"/>
         <UnitName Value="RSQL_Helper"/>
@@ -25,38 +25,42 @@
         <UnitName Value="RSQL_Crypto_BASE64"/>
       </Item3>
       <Item4>
-        <Filename Value="source/rsql_crypto_jwt.pas"/>
-        <UnitName Value="RSQL_Crypto_JWT"/>
+        <Filename Value="source/rsql_crypto_zstream.pas"/>
+        <UnitName Value="RSQL_Crypto_ZStream"/>
       </Item4>
       <Item5>
-        <Filename Value="source/rsql_server_database.pas"/>
-        <UnitName Value="RSQL_Server_Database"/>
+        <Filename Value="source/rsql_crypto_jwt.pas"/>
+        <UnitName Value="RSQL_Crypto_JWT"/>
       </Item5>
       <Item6>
-        <Filename Value="source/rsql_server_transaction.pas"/>
-        <UnitName Value="RSQL_Server_Transaction"/>
+        <Filename Value="source/rsql_server_database.pas"/>
+        <UnitName Value="RSQL_Server_Database"/>
       </Item6>
       <Item7>
-        <Filename Value="source/rsql_server_router.pas"/>
-        <UnitName Value="RSQL_Server_Router"/>
+        <Filename Value="source/rsql_server_transaction.pas"/>
+        <UnitName Value="RSQL_Server_Transaction"/>
       </Item7>
       <Item8>
-        <Filename Value="source/rsql_server_component.pas"/>
-        <UnitName Value="RSQL_Server_Component"/>
+        <Filename Value="source/rsql_server_router.pas"/>
+        <UnitName Value="RSQL_Server_Router"/>
       </Item8>
       <Item9>
-        <Filename Value="source/rsql_server_application.pas"/>
-        <UnitName Value="RSQL_Server_Application"/>
+        <Filename Value="source/rsql_server_component.pas"/>
+        <UnitName Value="RSQL_Server_Component"/>
       </Item9>
       <Item10>
-        <Filename Value="source/rsql_client_connection.pas"/>
-        <UnitName Value="RSQL_Client_Connection"/>
+        <Filename Value="source/rsql_server_application.pas"/>
+        <UnitName Value="RSQL_Server_Application"/>
       </Item10>
       <Item11>
+        <Filename Value="source/rsql_client_connection.pas"/>
+        <UnitName Value="RSQL_Client_Connection"/>
+      </Item11>
+      <Item12>
         <Filename Value="source/rsql_register.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="RSQL_Register"/>
-      </Item11>
+      </Item12>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

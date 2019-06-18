@@ -54,8 +54,9 @@ type
 
   THTTPServer = class(TFPCustomHttpServer)
   private
+    FCompressed: boolean;
     FCORS: boolean;
-    FCredential: string;  
+    FCredential: string;
     FDatabaseList: TDatabaseList;
     FCanExecute: boolean;
     FThread: THTTPServerThread;
@@ -72,6 +73,7 @@ type
     procedure Stop;
     procedure Start;
   published
+    property Compressed: boolean read FCompressed write FCompressed default False;
     property CORS: boolean read FCORS write FCORS default True;
     property Credential: string read FCredential write FCredential;
     property DatabaseList: TDatabaseList read FDatabaseList write SetDatabaseList;
@@ -146,6 +148,7 @@ begin
   Threaded := True;
   FDatabaseList := TDatabaseList.Create;
   FCanExecute := False;
+  FCompressed := False;
   FCORS := True;
   FCredential := '';
   /// Routes

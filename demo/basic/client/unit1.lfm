@@ -1,0 +1,120 @@
+object Form1: TForm1
+  Left = 368
+  Height = 340
+  Top = 170
+  Width = 653
+  Caption = 'Form1'
+  ClientHeight = 340
+  ClientWidth = 653
+  LCLVersion = '2.0.2.0'
+  object DBGrid1: TDBGrid
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Button1
+    AnchorSideTop.Side = asrBottom
+    AnchorSideRight.Control = Owner
+    AnchorSideRight.Side = asrBottom
+    AnchorSideBottom.Control = Owner
+    AnchorSideBottom.Side = asrBottom
+    Left = 5
+    Height = 300
+    Top = 35
+    Width = 643
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    BorderSpacing.Right = 5
+    BorderSpacing.Bottom = 5
+    Color = clWindow
+    Columns = <    
+      item
+        Title.Caption = 'ID'
+        Width = 60
+        FieldName = 'ID'
+      end    
+      item
+        Title.Caption = 'JobTitle'
+        Width = 200
+        FieldName = 'JobTitle'
+      end    
+      item
+        Title.Caption = 'EmailAddress'
+        Width = 200
+        FieldName = 'EmailAddress'
+      end    
+      item
+        Title.Caption = 'FirstNameLastName'
+        Width = 250
+        FieldName = 'FirstNameLastName'
+      end>
+    DataSource = DataSource1
+    TabOrder = 0
+  end
+  object Button1: TButton
+    AnchorSideLeft.Control = Owner
+    AnchorSideTop.Control = Owner
+    Left = 5
+    Height = 25
+    Top = 5
+    Width = 75
+    BorderSpacing.Left = 5
+    BorderSpacing.Top = 5
+    Caption = 'Load'
+    OnClick = Button1Click
+    TabOrder = 1
+  end
+  object RSQLHTTPConnection1: TRSQLHTTPConnection
+    Connected = False
+    LoginPrompt = False
+    DatabaseName = 'sqlitedb'
+    KeepConnection = False
+    Params.Strings = (
+      'Port=8091'
+    )
+    Transaction = SQLTransaction1
+    HostName = 'localhost'
+    left = 300
+    top = 40
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = False
+    Database = RSQLHTTPConnection1
+    left = 300
+    top = 90
+  end
+  object SQLQuery1: TSQLQuery
+    IndexName = 'DEFAULT_ORDER'
+    FieldDefs = <    
+      item
+        Name = 'ID'
+        DataType = ftLargeint
+      end    
+      item
+        Name = 'JobTitle'
+        DataType = ftString
+        Size = 500
+      end    
+      item
+        Name = 'EmailAddress'
+        DataType = ftString
+        Size = 500
+      end    
+      item
+        Name = 'FirstNameLastName'
+        DataType = ftString
+        Size = 500
+      end>
+    Database = RSQLHTTPConnection1
+    Transaction = SQLTransaction1
+    SQL.Strings = (
+      'select * from MOCKDATA'
+    )
+    Params = <>
+    left = 300
+    top = 144
+  end
+  object DataSource1: TDataSource
+    DataSet = SQLQuery1
+    left = 300
+    top = 200
+  end
+end

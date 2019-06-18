@@ -128,7 +128,7 @@ begin
   inherited Create;
   FStarted := 0;
   FDatabase := ADatabase;
-  FTransaction := TSQLTransaction.Create(nil); /// SQLDB
+  FTransaction := TSQLTransaction.Create(nil); /// SQLdb
   FTransaction.DataBase := FDatabase;
   FIdentifier := AIdentifier;
   if (FIdentifier = '') then

@@ -8,10 +8,10 @@ unit RSQL_Package;
 interface
 
 uses
-  RSQL_Helper, RSQL_Crypto_HMAC, RSQL_Crypto_BASE64, RSQL_Crypto_JWT, 
-  RSQL_Server_Database, RSQL_Server_Transaction, RSQL_Server_Router, 
-  RSQL_Server_Component, RSQL_Server_Application, RSQL_Client_Connection, 
-  RSQL_Register, LazarusPackageIntf;
+  RSQL_Helper, RSQL_Crypto_HMAC, RSQL_Crypto_BASE64, RSQL_Crypto_ZStream, 
+  RSQL_Crypto_JWT, RSQL_Server_Database, RSQL_Server_Transaction, 
+  RSQL_Server_Router, RSQL_Server_Component, RSQL_Server_Application, 
+  RSQL_Client_Connection, RSQL_Register, LazarusPackageIntf;
 
 implementation
 

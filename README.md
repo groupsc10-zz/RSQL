@@ -1,6 +1,6 @@
 # RSQL
 
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/groupsc10/RSQL/blob/master/LICENSE.txt)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/groupsc10/RSQL/LICENSE.txt)
 
 ## Introduction
 
@@ -38,4 +38,4 @@ Contributions are welcome! Please, open an issue before submit any kind (ideas, 
 
 
 ## License
-This project is released under MIT license. See [LICENSE](https://github.com/groupsc10/RSQL/blob/master/LICENSE.txt)
+This project is released under MIT license. See [LICENSE](LICENSE).

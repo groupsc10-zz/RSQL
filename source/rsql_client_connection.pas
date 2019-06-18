@@ -40,7 +40,8 @@ type
   { TRSQLHTTPConnection }
 
   TRSQLHTTPConnection = class(TSQLConnection)
-  private
+  private         
+    FCompressed: boolean;
     FTOKEN: string;
     function POST(const ARoute: string; const ASource: string = '{}'): string; overload;
     function POST(const ARoute: string; const AArguments: array of const; const ASource: string = '{}'): string; overload;
@@ -94,6 +95,7 @@ implementation
 uses
   FMTBcd,
   RSQL_Helper,
+  RSQL_Crypto_ZStream,
   RSQL_Crypto_BASE64;
 
 type
@@ -384,14 +386,38 @@ function TRSQLHTTPConnection.POST(const ARoute: string; const ASource: string): 
     Result := Format('http://%s:%d/', [HostName, Port]);
   end;
 
+var
+  VContentEncoding: string;
 begin
   with TFpHttpClient.Create(nil) do
     try
-      try
+      try                                          
         AddHeader('Authorization', Format('Bearer %s', [FTOKEN]));
         AddHeader('Content-Type', 'application/json');
-        RequestBody := TStringStream.Create(ASource);
-        Result := Post(URLBase + ARoute);  /// Send ==>>
+        if (FCompressed) then
+        begin
+          /// Encode request
+          AddHeader('Content-Encoding', 'deflate');
+          RequestBody := TStringStream.Create(ZCompressString(ASource));  
+          { TODO : add other forms of encode }
+        end
+        else
+        begin
+          RequestBody := TStringStream.Create(ASource);
+        end;
+        Result := Post(URLBase + ARoute); /// Send ==>>
+        /// Decode response
+        VContentEncoding := Trim(ResponseHeaders.Values['Content-Encoding']);
+        if (VContentEncoding <> '') then
+        begin
+          case (LowerCase(VContentEncoding)) of
+            'deflate':
+            begin
+              Result := ZDecompressString(Result);
+            end;
+            { TODO : add other forms of decode }
+          end;
+        end;
       except
         on E: Exception do
         begin
@@ -426,16 +452,18 @@ procedure TRSQLHTTPConnection.DoInternalConnect;
   end;
 
 var
-  VResponse: TJSONData;  
+  VResponse: TJSONData;
   VRoute: string;
 begin
   inherited DoInternalConnect;
+  FCompressed := False;
   FTOKEN := '';
   VRoute := Format('authentication?database=%s', [DatabaseName]);
   if (TJSONData.Parse(POST(VRoute, AuthenticationSource), VResponse)) then
     try
       if (VResponse.Path('success', False)) then
-      begin
+      begin                 
+        FCompressed := VResponse.Path('content.compressed', false);
         FTOKEN := VResponse.Path('content.token', '');
       end
       else
@@ -529,7 +557,7 @@ end;
 function TRSQLHTTPConnection.Rollback(ATrans: TSQLHandle): boolean;
 var
   VTrans: TRSQLTrans absolute ATrans;
-  VResponse: TJSONData;  
+  VResponse: TJSONData;
   VRoute: string;
 begin
   VRoute := Format('transaction?action=rollback&identifier=%s&database=%s', [VTrans.Identifier, DatabaseName]);
@@ -558,9 +586,9 @@ var
   VCursor: TRSQLCursor absolute ACursor;
   VTrans: TRSQLTrans;
   VQuerySource: string;
-  VResponse: TJSONData; 
+  VResponse: TJSONData;
   VRoute: string;
-begin                 
+begin
   VQuerySource := VCursor.BuildRequestStatement(AParams);
   VTrans := TRSQLTrans(ATransaction.Handle);
   VRoute := Format('statement?action=query&identifier=%s&database=%s', [VTrans.Identifier, DatabaseName]);
@@ -969,6 +997,7 @@ begin
   inherited Create(AOwner);
   Port := 8091;
   FConnOptions := FConnOptions + [sqSupportParams, sqEscapeRepeat, sqSupportReturning];
+  FCompressed := False;
   FTOKEN := '';
 end;
 

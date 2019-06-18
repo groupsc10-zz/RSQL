@@ -51,6 +51,7 @@ type
 
   TRSQLApplication = class(TCustomHTTPApplication)
   private
+    FCompressed: boolean;
     FCORS: boolean;
     FCredential: string;
     FDatabaseList: TDatabaseList;
@@ -62,6 +63,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    property Compressed: boolean read FCompressed write FCompressed default False;
     property CORS: boolean read FCORS write FCORS default True;
     property Credential: string read FCredential write FCredential;
     property DatabaseList: TDatabaseList read FDatabaseList write SetDatabaseList;
@@ -124,8 +126,9 @@ constructor TRSQLApplication.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   Port := 8091;
-  Threaded := True;      
+  Threaded := True;
   FDatabaseList := TDatabaseList.Create;
+  FCompressed := False;
   FCORS := True;
   FCredential := '';
   /// Routes

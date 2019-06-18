@@ -124,7 +124,8 @@ type
 implementation
 
 uses
-  RSQL_Crypto_BASE64;
+  RSQL_Crypto_BASE64,
+  RSQL_Crypto_ZStream;
 
 { TJSONDataHelper }
 
@@ -785,7 +786,25 @@ begin
     try
       Add('success', (ACode >= 200) and (ACode <= 299));
       Add('content', AContent);
-      Self.Content := Stringify();
+      if (Self.ContentEncoding = '') then
+      begin
+        Self.Content := Stringify();
+      end
+      else
+      begin
+        /// Encode response
+        case LowerCase(Self.ContentEncoding) of
+          'deflate':
+          begin
+            Self.Content := ZCompressString(Stringify());
+          end;   
+          { TODO : add other forms of encode }
+          else
+          begin
+            Self.Content := Stringify();
+          end;
+        end;
+      end;
     finally
       Free;
     end;

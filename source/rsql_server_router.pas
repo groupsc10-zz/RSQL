@@ -35,6 +35,7 @@ uses
   DB,
   sqldb,
   RSQL_Helper,
+  RSQL_Crypto_ZStream,
   RSQL_Crypto_JWT,
   RSQL_Server_Database;
 
@@ -47,6 +48,7 @@ type
     FRequest: TRequest;
     FResponse: TResponse;
     FAuthorization: string;
+    FCompressed: boolean;
     FCORS: boolean;
     FCredential: string;
     FMethod: string;
@@ -56,6 +58,7 @@ type
   protected
     function AllowedMethods: string; virtual;
     procedure CheckMethod; virtual;
+    procedure CheckContentEncoding; virtual;
     procedure CheckContent; virtual;
     procedure CheckAutorization; virtual;
     procedure CheckDatabase; virtual;
@@ -154,6 +157,21 @@ begin
   end;
 end;
 
+procedure TRoute.CheckContentEncoding;
+begin
+  /// Decode request
+  if (FRequest.ContentEncoding <> '') then
+  begin
+    case (LowerCase(FRequest.ContentEncoding)) of
+      'deflate':
+      begin
+        FRequest.Content := ZDecompressString(FRequest.Content);
+      end;
+      { TODO : add other forms of decode }
+    end;
+  end;
+end;
+
 procedure TRoute.CheckContent;
 begin
   if (FRequest.ContentType <> 'application/json') then
@@ -189,14 +207,14 @@ var
 begin
   FDatabase := nil;
   if (Assigned(FDatabaseList)) then
-  begin          
+  begin
     VDatabaseName := FRequest.QueryFields.Values['database'];
     if (VDatabaseName <> '') then
-    begin                     
+    begin
       VDatabaseItem := FDatabaseList.Find(VDatabaseName);
     end
     else
-    begin          
+    begin
       VDatabaseItem := FDatabaseList.FindDefault;
     end;
     if (Assigned(VDatabaseItem)) then
@@ -226,28 +244,32 @@ end;
 
 procedure TRoute.HandleRequest(AServer: TObject; ARequest: TRequest; AResponse: TResponse);
 var
-  VServerComp: TRSQLHTTPServer;
-  VServerApp: TRSQLApplication;
+  VServerCOMP: TRSQLHTTPServer;
+  VServerAPP: TRSQLApplication;
 begin
   try
     /// Server
     if (Assigned(AServer)) and (AServer.InheritsFrom(TRSQLHTTPServer)) then
     begin
-      VServerComp := TRSQLHTTPServer(AServer);
-      FCORS := VServerComp.CORS;
-      FCredential := VServerComp.Credential;
-      FDatabaseList := VServerComp.DatabaseList;
+      VServerCOMP := TRSQLHTTPServer(AServer);
+      FCompressed := VServerCOMP.Compressed;
+      FCORS := VServerCOMP.CORS;
+      FCredential := VServerCOMP.Credential;
+      FDatabaseList := VServerCOMP.DatabaseList;
     end
+    /// Server Application
     else
     if (Assigned(AServer)) and (AServer.InheritsFrom(TRSQLApplication)) then
     begin
-      VServerApp := TRSQLApplication(AServer);
-      FCORS := VServerApp.CORS;
-      FCredential := VServerApp.Credential;
-      FDatabaseList := VServerApp.DatabaseList;
+      VServerAPP := TRSQLApplication(AServer);
+      FCompressed := VServerAPP.Compressed;
+      FCORS := VServerAPP.CORS;
+      FCredential := VServerAPP.Credential;
+      FDatabaseList := VServerAPP.DatabaseList;
     end
     else
-    begin
+    begin        
+      FCompressed := False;
       FCORS := True;
       FCredential := '';
       FDatabaseList := nil;
@@ -257,18 +279,24 @@ begin
     /// Response
     FResponse := AResponse;
     FResponse.ContentType := 'application/json; charset=utf-8';
-    /// Cross-origin resource sharing
+    /// Response/CORS
     if (FCORS) then
     begin
       FResponse.SetCustomHeader('Access-Control-Allow-Origin', '*');
       FResponse.SetCustomHeader('Access-Control-Allow-Credentials', 'true');
       FResponse.SetCustomHeader('Access-Control-Allow-Headers', 'X-Custom-Header, Cache-Control');
+    end;      
+    /// Response/Encode
+    if (FCompressed) then
+    begin
+      FResponse.ContentEncoding := 'deflate';
     end;
     /// Methods
     FMethod := UpperCase(FRequest.Method);
     /// Validations
     CheckDatabase;
     CheckMethod;
+    CheckContentEncoding;
     CheckContent;
     CheckAutorization;
     /// Redirection
@@ -331,7 +359,8 @@ procedure TRouteAuthentication.Post;
   function AuthenticationInfo: TJSONObject;
   begin
     Result := TJSONObject.Create();
-    Result.Add('token', JWTSign(FCredential, PAYLOAD));
+    Result.Add('token', JWTSign(FCredential, PAYLOAD)); 
+    Result.Add('compressed', FCompressed);
   end;
 
 begin
@@ -416,7 +445,7 @@ procedure TRouteDatabase.Schema;
 var
   VObjectName: string;
   VPattern: string;
-  VSchemaType: integer;  
+  VSchemaType: integer;
   VConnection: TSQLConnection;
 begin
   VObjectName := FContent.Path('object', '');

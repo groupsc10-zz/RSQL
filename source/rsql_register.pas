@@ -115,7 +115,7 @@ function TRSQLApplicationDescriptor.InitProject(AProject: TLazProject): TModalRe
     Result := Result + LineEnding;
     Result := Result + '{$mode objfpc}{$H+}' + LineEnding;
     Result := Result + LineEnding;
-    Result := Result + 'uses' + LineEnding;    
+    Result := Result + 'uses' + LineEnding;
     Result := Result + '  {$IFDEF UNIX}' + LineEnding;
     Result := Result + '  cthreads,' + LineEnding;
     Result := Result + '  {$ENDIF}' + LineEnding;
