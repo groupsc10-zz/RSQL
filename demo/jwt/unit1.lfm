@@ -1,0 +1,70 @@
+object Form1: TForm1
+  Left = 163
+  Height = 424
+  Top = 139
+  Width = 597
+  Anchors = [akTop, akLeft, akRight]
+  Caption = 'Test JWT'
+  ClientHeight = 424
+  ClientWidth = 597
+  OnCreate = FormCreate
+  LCLVersion = '2.1.0.0'
+  object payload_label: TLabel
+    Left = 16
+    Height = 18
+    Top = 16
+    Width = 64
+    Anchors = [akLeft]
+    Caption = 'Payload:'
+    ParentColor = False
+  end
+  object token_label: TLabel
+    Left = 16
+    Height = 18
+    Top = 232
+    Width = 48
+    Anchors = [akLeft]
+    Caption = 'token:'
+    ParentColor = False
+  end
+  object payload_input: TMemo
+    Left = 16
+    Height = 146
+    Top = 48
+    Width = 567
+    Anchors = [akLeft, akRight, akBottom]
+    ScrollBars = ssAutoBoth
+    TabOrder = 0
+  end
+  object token_input: TMemo
+    Left = 16
+    Height = 146
+    Top = 264
+    Width = 567
+    Anchors = [akLeft, akRight, akBottom]
+    ReadOnly = True
+    ScrollBars = ssBoth
+    TabOrder = 1
+    WantTabs = True
+  end
+  object gen_token_button: TButton
+    Left = 328
+    Height = 25
+    Top = 9
+    Width = 255
+    Anchors = [akLeft, akRight, akBottom]
+    Caption = 'Generate Token'
+    OnClick = gen_token_buttonClick
+    TabOrder = 2
+  end
+  object val_token_button1: TButton
+    Left = 328
+    Height = 25
+    Top = 232
+    Width = 255
+    Anchors = [akLeft, akRight, akBottom]
+    Caption = 'Validate Token'
+    OnClick = val_token_button1Click
+    TabOrder = 3
+  end
+end

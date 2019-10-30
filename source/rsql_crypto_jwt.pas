@@ -67,8 +67,8 @@ begin
   Result := False;
   try
     /// Segments
-    VHeaderSeg := BASE64URLDecode(ExtractWord(1, ATOKEN, ['.']));
-    VPAYLOADSeg := BASE64URLDecode(ExtractWord(2, ATOKEN, ['.']));
+    VHeaderSeg := ExtractWord(1, ATOKEN, ['.']);
+    VPAYLOADSeg := ExtractWord(2, ATOKEN, ['.']);
     VSignatureSeg := ExtractWord(3, AToken, ['.']);
     /// Check signature
     VSignature := BASE64URLEncode(HMACSHA256(AKEY, VHeaderSeg + '.' + VPAYLOADSeg));
@@ -77,7 +77,7 @@ begin
       raise Exception.Create('signature verification failed');
     end;
     /// Check algorithm type
-    if (TJSONData.Parse(VHeaderSeg, VHeader)) then
+    if (TJSONData.Parse(BASE64URLDecode(VHeaderSeg), VHeader)) then
     begin
       try
         if (VHeader.Path('alg', '') <> 'HS256') then
@@ -89,7 +89,7 @@ begin
       end;
     end;
     /// Check if token is expired
-    if (TJSONData.Parse(VPAYLOADSeg, VPAYLOAD)) then
+    if (TJSONData.Parse(BASE64URLDecode(VPAYLOADSeg), VPAYLOAD)) then
     begin
       try
         if (VPAYLOAD.Path('exp', 0) <= Now) then
