@@ -33,7 +33,8 @@ uses
   SQLdb,
   BufDataset,
   fphttpclient,
-  fpjson;
+  fpjson,
+  opensslsockets;
 
 type
 
@@ -43,6 +44,7 @@ type
   private         
     FCompressed: boolean;
     FTOKEN: string;
+    FUseSSL: Boolean;
     function POST(const ARoute: string; const ASource: string = '{}'): string; overload;
     function POST(const ARoute: string; const AArguments: array of const; const ASource: string = '{}'): string; overload;
   protected
@@ -75,7 +77,8 @@ type
     constructor Create(AOwner: TComponent); override;
     function GetConnectionInfo(AInfoType: TConnInfoType): string; override;
   published
-    property Port default 8091;
+    property Port default 8091;   
+    Property UseSSL : Boolean Read FUseSSL Write FUseSSL;
   end;
 
   { TRSQLHTTPConnectionDef }
@@ -383,7 +386,14 @@ function TRSQLHTTPConnection.POST(const ARoute: string; const ASource: string): 
     begin
       HostName := 'localhost';
     end;
-    Result := Format('http://%s:%d/', [HostName, Port]);
+    if (UseSSL) then
+    begin
+      Result := Format('https://%s:%d/', [HostName, Port])
+    end
+    else
+    begin
+      Result := Format('http://%s:%d/', [HostName, Port]);
+    end;
   end;
 
 var
@@ -1004,7 +1014,17 @@ end;
 function TRSQLHTTPConnection.GetConnectionInfo(AInfoType: TConnInfoType): string;
 begin
   case AInfoType of
-    citServerType: Result := 'http';
+    citServerType:
+    begin
+      if (FUseSSL) then
+      begin
+        Result := 'https';
+      end
+      else
+      begin
+        Result := 'http';
+      end;
+    end;
     citServerVersion: Result := '0.9';
     citServerVersionString: Result := '09';
     citClientName: Result := 'rSQL';
