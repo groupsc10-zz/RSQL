@@ -680,12 +680,8 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
       begin
         ARecno := 1;
       end;
-      if (ARecno > RowsAffected) then
-      begin
-        ARecno := RowsAffected;
-      end;
       RecNo := ARecno; 
-      while not(EOF) and (RecNo < (ARecno + APacketRecords)) do
+      while not(EOF) or (RecNo < (ARecno + APacketRecords)) do
       begin
         Result.Add(ExtractRow);
         Next;

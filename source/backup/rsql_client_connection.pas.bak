@@ -377,7 +377,7 @@ end;
 
 function TRSQLCursor.Fetch: boolean;
 begin
-  {$IfDef rsql_experimental}
+          {$IfDef rsql_experimental}
   if (FStatus >= FMax) then
   begin
     FStatus := 0;
