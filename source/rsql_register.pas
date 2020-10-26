@@ -177,6 +177,7 @@ function TRSQLApplicationDescriptor.InitProject(AProject: TLazProject): TModalRe
     Result := Result + '      Name := ''database'';' + LineEnding;
     Result := Result + '    end;' + LineEnding;
     Result := Result + '  end;' + LineEnding; 
+    Result := Result + LineEnding;            
     Result := Result + LineEnding;
     Result := Result + 'begin' + LineEnding; 
     Result := Result + '  with TRSQLApp.Create(nil) do' + LineEnding;
