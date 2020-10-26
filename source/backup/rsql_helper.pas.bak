@@ -663,7 +663,6 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
   function ExtractRows: TJSONArray;
   {$Else}                                                        
   function ExtractRows(ARecno, APacketRecords: Int64): TJSONArray;
-  {$EndIf}
   begin
     Result := TJSONArray.Create();
     try
