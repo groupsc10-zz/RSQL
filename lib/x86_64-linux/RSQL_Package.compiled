@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="/home/helio/Documentos/dev/fpc/trunk/fpc/bin/x86_64-linux/fpc.sh" Date="1603703261"/>
+  <Params Value=" -MObjFPC -Scghi -Cg -O1 -g -gl -l -vewnhibq -Fu/home/helio/Documentos/dev/work/RSQL/source -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/packager/units/x86_64-linux -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/components/lazutils/lib/x86_64-linux -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/components/buildintf/units/x86_64-linux -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/components/freetype/lib/x86_64-linux -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/lcl/units/x86_64-linux -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/lcl/units/x86_64-linux/gtk2 -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/components/lazcontrols/lib/x86_64-linux/gtk2 -Fu/home/helio/Documentos/dev/fpc/trunk/lazarus/components/ideintf/units/x86_64-linux/gtk2 -Fu/home/helio/Documentos/dev/work/RSQL/ -FU/home/helio/Documentos/dev/work/RSQL/lib/x86_64-linux/ -dLCL -dLCLgtk2 rsql_package.pas"/>
+</CONFIG>

@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -46,6 +46,7 @@ uses
 function JWTHeader: string;
 begin
   with TJSONObject.Create() do
+  begin
     try
       Add('alg', 'HS256');
       Add('typ', 'JWT');
@@ -53,6 +54,7 @@ begin
     finally
       Free;
     end;
+  end;
 end;
 
 function JWTParse(const ATOKEN, AKEY: string; out AOutput: string): boolean;
@@ -80,7 +82,7 @@ begin
     if (TJSONData.Parse(BASE64URLDecode(VHeaderSeg), VHeader)) then
     begin
       try
-        if (VHeader.Path('alg', '') <> 'HS256') then
+        if (VHeader.Path('alg', EmptyStr) <> 'HS256') then
         begin
           raise Exception.Create('algorithm not supported');
         end;
@@ -100,7 +102,7 @@ begin
         FreeAndNil(VPAYLOAD);
       end;
     end;
-    { TODO : Add new checks }
+    // TODO: Add new checks
     AOutput := 'JWT signature verified';
     Result := True;
   except

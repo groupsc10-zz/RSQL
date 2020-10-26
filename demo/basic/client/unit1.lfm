@@ -62,7 +62,7 @@ object Form1: TForm1
     OnClick = Button1Click
     TabOrder = 1
   end
-  object RSQLHTTPConnection1: TRSQLHTTPConnection
+  object RSQLClient1: TRSQLClient
     Connected = False
     LoginPrompt = False
     DatabaseName = 'sqlitedb'

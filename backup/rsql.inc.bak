@@ -1,3 +1,3 @@
 {$mode objfpc}{$H+}
 {**$define rsql_debug}
-{$define rsql_experimental}
+{**$define rsql_experimental}

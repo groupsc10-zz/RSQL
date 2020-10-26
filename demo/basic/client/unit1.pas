@@ -16,7 +16,7 @@ type
     Button1: TButton;
     DataSource1: TDataSource;
     DBGrid1: TDBGrid;
-    RSQLHTTPConnection1: TRSQLHTTPConnection;
+    RSQLClient1: TRSQLClient;
     SQLQuery1: TSQLQuery;
     SQLTransaction1: TSQLTransaction;
     procedure Button1Click(Sender: TObject);

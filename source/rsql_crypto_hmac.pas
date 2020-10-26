@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ begin
   x[2] := y[1];
   x[3] := y[0];
 end;
-                               
+
 /// Ref: https://github.com/stijnsanders/TRethinkDB/blob/master/RethinkDBAuth.pas#L46
 function SHA256HASH(x: string): string;
 const
@@ -117,7 +117,9 @@ begin
     begin
       a := e[j - 15];
       b := e[j - 2];
-      e[j] := e[j - 16] + (((a shr 7) or (a shl 25)) xor ((a shr 18) or (a shl 14)) xor (a shr 3)) + e[j - 7] + (((b shr 17) or (b shl 15)) xor ((b shr 19) or (b shl 13)) xor (b shr 10));
+      e[j] := e[j - 16] + (((a shr 7) or (a shl 25)) xor
+        ((a shr 18) or (a shl 14)) xor (a shr 3)) + e[j - 7] +
+        (((b shr 17) or (b shl 15)) xor ((b shr 19) or (b shl 13)) xor (b shr 10));
       Inc(j);
     end;
     g := h;
@@ -126,9 +128,12 @@ begin
     begin
       a := g[4];
       b := g[0];
-      a := g[7] + (((a shr 6) or (a shl 26)) xor ((a shr 11) or (a shl 21)) xor ((a shr 25) or (a shl 7))) + ((g[4] and g[5]) or (not (g[4]) and g[6])) + base[j] + e[j];
+      a := g[7] + (((a shr 6) or (a shl 26)) xor ((a shr 11) or (a shl 21)) xor
+        ((a shr 25) or (a shl 7))) + ((g[4] and g[5]) or (not (g[4]) and g[6])) +
+        base[j] + e[j];
       Inc(g[3], a);
-      a := a + (((b shr 2) or (b shl 30)) xor ((b shr 13) or (b shl 19)) xor ((b shr 22) or (b shl 10))) + ((g[0] and g[1]) or (g[1] and g[2]) or (g[2] and g[0]));
+      a := a + (((b shr 2) or (b shl 30)) xor ((b shr 13) or (b shl 19)) xor
+        ((b shr 22) or (b shl 10))) + ((g[0] and g[1]) or (g[1] and g[2]) or (g[2] and g[0]));
       g[7] := g[6];
       g[6] := g[5];
       g[5] := g[4];
@@ -193,4 +198,3 @@ begin
 end;
 
 end.
-

@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -64,24 +64,24 @@ uses
 procedure Register;
 begin
   {$I rsql.lrs}
-  RegisterComponents('SQLdb', [TRSQLHTTPServer, TRSQLHTTPConnection]);
+  RegisterComponents('SQLdb', [TRSQLServer, TRSQLClient]);
 
-  /// Hide properties TRSQLHTTPServer
-  RegisterPropertyEditor(TypeInfo(string), TRSQLHTTPServer, 'AdminMail', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(string), TRSQLHTTPServer, 'AdminName', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(string), TRSQLHTTPServer, 'ServerBanner', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(boolean), TRSQLHTTPServer, 'LookupHostNames', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(boolean), TRSQLHTTPServer, 'Threaded', THiddenPropertyEditor);
+  /// Hide properties TRSQLServer
+  RegisterPropertyEditor(TypeInfo(string), TRSQLServer, 'AdminMail', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(string), TRSQLServer, 'AdminName', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(string), TRSQLServer, 'ServerBanner', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(boolean), TRSQLServer, 'LookupHostNames', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(boolean), TRSQLServer, 'Threaded', THiddenPropertyEditor);
 
-  /// Hide properties TRSQLHTTPConnection
-  RegisterPropertyEditor(TypeInfo(string), TRSQLHTTPConnection, 'CharSet', THiddenPropertyEditor);
-  //RegisterPropertyEditor(TypeInfo(string), TRSQLHTTPConnection, 'DatabaseName', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(boolean), TRSQLHTTPConnection, 'KeepConnection', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(boolean), TRSQLHTTPConnection, 'LoginPrompt', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(string), TRSQLHTTPConnection, 'Role', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(TStrings), TRSQLHTTPConnection, 'Params', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(TDBEventTypes), TRSQLHTTPConnection, 'LogEvents', THiddenPropertyEditor);
-  RegisterPropertyEditor(TypeInfo(TSQLConnectionOptions), TRSQLHTTPConnection, 'Options', THiddenPropertyEditor);
+  /// Hide properties TRSQLClient
+  RegisterPropertyEditor(TypeInfo(string), TRSQLClient, 'CharSet', THiddenPropertyEditor);
+  //RegisterPropertyEditor(TypeInfo(string), TRSQLClient, 'DatabaseName', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(boolean), TRSQLClient, 'KeepConnection', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(boolean), TRSQLClient, 'LoginPrompt', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(string), TRSQLClient, 'Role', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(TStrings), TRSQLClient, 'Params', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(TDBEventTypes), TRSQLClient, 'LogEvents', THiddenPropertyEditor);
+  RegisterPropertyEditor(TypeInfo(TSQLConnectionOptions), TRSQLClient, 'Options', THiddenPropertyEditor);
 
   /// RSQL Application
   ProjectDescriptorRSQLApplication := TRSQLApplicationDescriptor.Create;

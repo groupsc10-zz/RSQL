@@ -7,7 +7,7 @@
 
 **ATTENTION**: We are still in an alpha version, the API can and * will * change frequently. Please use it at your own risk until we release version 1.0.
 
-**RSQL** is a REST api/component/lib to access a SQL databases, using native [LAZARUS](https://www.lazarus-ide.org/) connector.
+**RSQL** is a api/component/lib to access a SQL databases, using native [LAZARUS](https://www.lazarus-ide.org/) connector.
 
 ## Features
 

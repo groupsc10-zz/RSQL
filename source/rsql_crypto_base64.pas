@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -44,7 +44,7 @@ uses
 
 function BASE64Decode(const AValue: string): string;
 begin
-  if (AValue = '') then
+  if (AValue = EmptyStr) then
   begin
     Result := AValue;
   end
@@ -55,8 +55,8 @@ begin
 end;
 
 function BASE64Encode(const AValue: string): string;
-begin          
-  if (AValue = '') then
+begin
+  if (AValue = EmptyStr) then
   begin
     Result := AValue;
   end
@@ -70,7 +70,7 @@ function BASE64URLDecode(const AValue: string): string;
 var
   VLength: integer;
 begin
-  if (AValue = '') then
+  if (AValue = EmptyStr) then
   begin
     Result := AValue;
   end
@@ -88,7 +88,7 @@ end;
 
 function BASE64URLEncode(const AValue: string): string;
 begin
-  if (AValue = '') then
+  if (AValue = EmptyStr) then
   begin
     Result := AValue;
   end

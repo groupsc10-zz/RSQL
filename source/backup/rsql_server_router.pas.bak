@@ -668,7 +668,7 @@ begin
           {$Else}
           FResponse.Envelop(200, VQuery.SaveToJSON(
             FContent.Path('options.recno', 1),
-            FContent.Path('options.packetrecords', 100)));
+            FContent.Path('options.packetrecord', 100)));
           {$EndIf}
         except
           raise
@@ -712,7 +712,7 @@ begin
         {$Else}
         FResponse.Envelop(200, VQuery.SaveToJSON(
           FContent.Path('options.recno', 1),
-          FContent.Path('options.packetrecords', 100)));  
+          FContent.Path('options.packetrecord', 100)));  
         {$EndIf}
         // Transaction
         VTransactionItem.Commit;

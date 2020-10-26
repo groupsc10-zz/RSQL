@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -66,7 +66,8 @@ type
     procedure DoOnTerminate({%H-}ASender: TObject);
     procedure SetDatabaseList(AValue: TDatabaseList);
   protected
-    procedure HandleRequest(var ARequest: TFPHTTPConnectionRequest; var AResponse: TFPHTTPConnectionResponse); override;
+    procedure HandleRequest(var ARequest: TFPHTTPConnectionRequest;
+      var AResponse: TFPHTTPConnectionResponse); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -83,9 +84,9 @@ type
     property OnBeforeRequest: TRequestEvent read FOnBeforeRequest write FOnBeforeRequest;
   end;
 
-  { TRSQLHTTPServer }
+  { TRSQLServer }
 
-  TRSQLHTTPServer = class(THTTPServer);
+  TRSQLServer = class(THTTPServer);
 
 implementation
 
@@ -125,15 +126,16 @@ begin
   FDatabaseList.Assign(AValue);
 end;
 
-procedure THTTPServer.HandleRequest(var ARequest: TFPHTTPConnectionRequest; var AResponse: TFPHTTPConnectionResponse);
+procedure THTTPServer.HandleRequest(var ARequest: TFPHTTPConnectionRequest;
+  var AResponse: TFPHTTPConnectionResponse);
 begin
-  /// Before request
+  // Before request
   if (Assigned(FOnBeforeRequest)) then
   begin
     FOnBeforeRequest(Self, ARequest);
   end;
   HTTPRouter.RouteRequest(Self, ARequest, AResponse);
-  /// After request
+  // After request
   if (Assigned(FOnAfterRequest)) then
   begin
     FOnAfterRequest(Self, AResponse);
@@ -150,8 +152,8 @@ begin
   FCanExecute := False;
   FCompressed := False;
   FCORS := True;
-  FCredential := '';
-  /// Routes
+  FCredential := EmptyStr;
+  // Routes
   InitializeRoutes;
 end;
 
@@ -203,7 +205,7 @@ begin
   finally
     FCanExecute := True;
   end;
-  /// Start
+  // Start
   FThread.Start;
 end;
 

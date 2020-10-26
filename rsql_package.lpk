@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Package Version="4">
+  <Package Version="5">
     <Name Value="RSQL_Package"/>
     <Type Value="RunAndDesignTime"/>
     <CompilerOptions>
@@ -10,7 +10,7 @@
         <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Version Minor="1" Release="1" Build="2"/>
+    <Version Major="1" Minor="1" Release="1" Build="1"/>
     <Files Count="12">
       <Item1>
         <Filename Value="source/rsql_helper.pas"/>
@@ -62,6 +62,7 @@
         <UnitName Value="RSQL_Register"/>
       </Item12>
     </Files>
+    <CompatibilityMode Value="True"/>
     <RequiredPkgs Count="2">
       <Item1>
         <PackageName Value="IDEIntf"/>

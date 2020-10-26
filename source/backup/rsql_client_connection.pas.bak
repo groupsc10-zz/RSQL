@@ -452,8 +452,7 @@ procedure TRSQLClient.PrepareStatement(ACursor: TSQLCursor;
 var
   VCursor: TRSQLCursor absolute ACursor;
 begin
-  VCursor.Statement := ABuf;  
-  VCursor.Prepared := True;
+  VCursor.Statement := ABuf;
 end;
 
 procedure TRSQLClient.UnPrepareStatement(ACursor: TSQLCursor);

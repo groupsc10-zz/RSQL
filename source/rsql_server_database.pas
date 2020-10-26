@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -32,7 +32,7 @@ uses
   DB;
 
 type
-  /// Forward declaration
+  // Forward declaration
   TDatabaseList = class;
 
   { TDatabaseItem }
@@ -88,7 +88,7 @@ begin
       end
       else
       begin
-        /// Without default
+        // Without default
         if (not (Assigned(FDatabaseList.FindDefault))) then
         begin
           FIsDefault := True;
@@ -104,7 +104,8 @@ begin
   begin
     if (Assigned(FDatabaseList)) and (Assigned(FDatabaseList.Find(AValue))) then
     begin
-      raise Exception.CreateFmt('duplicate name ''%s'' in %s', [AValue, FDatabaseList.ClassName]);
+      raise Exception.CreateFmt('duplicate name ''%s'' in %s',
+        [AValue, FDatabaseList.ClassName]);
     end;
     FName := AValue;
   end;
@@ -115,7 +116,7 @@ begin
   if (FDatabase <> AValue) then
   begin
     FDatabase := AValue;
-    if (Assigned(FDatabase)) and (FName = '') then
+    if (Assigned(FDatabase)) and (FName = EmptyStr) then
     begin
       SetName(FDatabase.Name);
     end;
@@ -124,7 +125,7 @@ end;
 
 function TDatabaseItem.GetDisplayName: string;
 begin
-  if (FName = '') then
+  if (FName = EmptyStr) then
   begin
     Result := inherited GetDisplayName;
   end

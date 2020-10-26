@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -90,14 +90,14 @@ begin
     begin
       raise EFPWebError.Create('unattributed or incompatible SERVER');
     end;
-    /// Before request
+    // Before request
     if (Assigned(VServer.OnBeforeRequest)) then
     begin
       VServer.OnBeforeRequest(Self, ARequest);
     end;
-    /// Without legacy
+    // Without legacy
     HTTPRouter.RouteRequest(VServer, ARequest, AResponse);
-    /// After request
+    // After request
     if (Assigned(VServer.OnAfterRequest)) then
     begin
       VServer.OnAfterRequest(Self, AResponse);
@@ -130,8 +130,8 @@ begin
   FDatabaseList := TDatabaseList.Create;
   FCompressed := False;
   FCORS := True;
-  FCredential := '';
-  /// Routes
+  FCredential := EmptyStr;
+  // Routes
   InitializeRoutes;
 end;
 

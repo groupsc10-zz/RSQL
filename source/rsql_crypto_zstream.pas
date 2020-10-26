@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -31,7 +31,8 @@ uses
   SysUtils,
   ZStream;
 
-function ZCompressString(AString: string; const ALevel: TCompressionLevel = clmax): string;
+function ZCompressString(AString: string;
+  const ALevel: TCompressionLevel = clmax): string;
 function ZDecompressString(AString: string): string;
 
 implementation
@@ -52,7 +53,7 @@ begin
     finally
       FreeAndNil(VCompressionStream);
     end;
-    Result := EncodeStringBase64( VStream.DataString );
+    Result := EncodeStringBase64(VStream.DataString);
   finally
     FreeAndNil(VStream);
   end;
@@ -67,7 +68,7 @@ begin
   try
     VDeCompressionStream := Tdecompressionstream.Create(VStream);
     try
-      VDeCompressionStream.Position:= 0;
+      VDeCompressionStream.Position := 0;
       Result := VDeCompressionStream.ReadAnsiString;
     finally
       FreeAndNil(VDeCompressionStream);

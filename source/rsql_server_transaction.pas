@@ -1,7 +1,7 @@
 {
   MIT License
 
-  Copyright (c) 2019 Anderson J. Gado da Silva and Hélio S. Ribeiro
+  Copyright (c) 2020 Anderson J. Gado da Silva and Hélio S. Ribeiro
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -50,7 +50,8 @@ type
     procedure UNLOCK;
     procedure CheckDatabase;
   public
-    constructor Create(const ADatabase: TDatabase; const AIdentifier: string = ''; const ADurability: integer = -1); reintroduce;
+    constructor Create(const ADatabase: TDatabase; const AIdentifier: string = '';
+      const ADurability: integer = -1); reintroduce;
     destructor Destroy; override;
     procedure Start; virtual;
     procedure Commit; virtual;
@@ -74,7 +75,8 @@ type
     constructor Create; reintroduce;
     destructor Destroy; override;
     function Add(const ATransactionItem: TTransactionItem): TTransactionItem; overload;
-    function Add(const ADatabase: TDatabase; const AIdentifier: string = ''; const ADurability: integer = -1): TTransactionItem; overload;
+    function Add(const ADatabase: TDatabase; const AIdentifier: string = '';
+      const ADurability: integer = -1): TTransactionItem; overload;
     procedure Clear;
     function Count: integer;
     function Exists(const AIdentifier: string): boolean; overload;
@@ -84,7 +86,7 @@ type
     property Items[const AIndex: integer]: TTransactionItem read Find; default;
   end;
 
-/// Singleton
+// Singleton
 function TransactionList: TTransactionList;
 
 implementation
@@ -100,7 +102,8 @@ begin
   Result := '';
   SetLength(Result, 32);
   StrLFmt(PChar(Result), 32, '%.8x%.4x%.4x%.2x%.2x%.2x%.2x%.2x%.2x%.2x%.2x',
-    [longint(G.D1), G.D2, G.D3, G.D4[0], G.D4[1], G.D4[2], G.D4[3], G.D4[4], G.D4[5], G.D4[6], G.D4[7]]);
+    [longint(G.D1), G.D2, G.D3, G.D4[0], G.D4[1], G.D4[2], G.D4[3],
+    G.D4[4], G.D4[5], G.D4[6], G.D4[7]]);
 end;
 
 { TTransactionItem }
@@ -123,12 +126,13 @@ begin
   end;
 end;
 
-constructor TTransactionItem.Create(const ADatabase: TDatabase; const AIdentifier: string; const ADurability: integer);
+constructor TTransactionItem.Create(const ADatabase: TDatabase;
+  const AIdentifier: string; const ADurability: integer);
 begin
   inherited Create;
   FStarted := 0;
   FDatabase := ADatabase;
-  FTransaction := TSQLTransaction.Create(nil); /// SQLdb
+  FTransaction := TSQLTransaction.Create(nil); // SQLdb
   FTransaction.DataBase := FDatabase;
   FIdentifier := AIdentifier;
   if (FIdentifier = '') then
@@ -138,7 +142,7 @@ begin
   FDurability := ADurability;
   if (FDurability <= 0) then
   begin
-    FDurability := (1000 * 60 * 60); /// 1h
+    FDurability := (1000 * 60 * 60); // 1h
   end;
   InitCriticalSection(FLOCK);
 end;
@@ -164,7 +168,7 @@ begin
       if (not (FTransaction.Active)) then
       begin
         FTransaction.StartTransaction;
-        FStarted := Now; /// Cycle
+        FStarted := Now; // Cycle
       end;
     finally
       UNLOCK;
@@ -172,7 +176,8 @@ begin
   except
     on E: Exception do
     begin
-      raise Exception.CreateFmt('it wasn''t possible to start the transaction. [%s]', [E.Message]);
+      raise Exception.CreateFmt('it wasn''t possible to start the transaction. [%s]',
+        [E.Message]);
     end;
   end;
 end;
@@ -197,7 +202,8 @@ begin
   except
     on E: Exception do
     begin
-      raise Exception.CreateFmt('it wasn''t possible to commit the transaction. [%s]', [E.Message]);
+      raise Exception.CreateFmt('it wasn''t possible to commit the transaction. [%s]',
+        [E.Message]);
     end;
   end;
 end;
@@ -222,7 +228,8 @@ begin
   except
     on E: Exception do
     begin
-      raise Exception.CreateFmt('it wasn''t possible to rollback the transaction. [%s]', [E.Message]);
+      raise Exception.CreateFmt('it wasn''t possible to rollback the transaction. [%s]',
+        [E.Message]);
     end;
   end;
 end;
@@ -235,7 +242,8 @@ begin
   except
     on E: Exception do
     begin
-      raise Exception.CreateFmt('it wasn''t possible check transaction. [%s]', [E.Message]);
+      raise Exception.CreateFmt('it wasn''t possible check transaction. [%s]',
+        [E.Message]);
     end;
   end;
 end;
@@ -308,13 +316,15 @@ begin
   inherited Destroy;
 end;
 
-function TTransactionList.Add(const ATransactionItem: TTransactionItem): TTransactionItem;
+function TTransactionList.Add(
+  const ATransactionItem: TTransactionItem): TTransactionItem;
 begin
   Result := ATransactionItem;
   FList.Add(ATransactionItem);
 end;
 
-function TTransactionList.Add(const ADatabase: TDatabase; const AIdentifier: string; const ADurability: integer): TTransactionItem;
+function TTransactionList.Add(const ADatabase: TDatabase;
+  const AIdentifier: string; const ADurability: integer): TTransactionItem;
 begin
   Result := Add(TTransactionItem.Create(ADatabase, AIdentifier, ADurability));
 end;
@@ -342,7 +352,8 @@ begin
   Result := (IndexOf(AIdentifier) > -1);
 end;
 
-function TTransactionList.Exists(const AIdentifier: string; out AIndex: integer): boolean;
+function TTransactionList.Exists(const AIdentifier: string;
+  out AIndex: integer): boolean;
 begin
   AIndex := IndexOf(AIdentifier);
   Result := (AIndex > -1);
@@ -353,7 +364,7 @@ begin
   Result := TTransactionItem(FList[AIndex]);
 end;
 
-/// Singleton
+// Singleton
 var
   VTransactionList: TTransactionList = nil;
 
