@@ -139,6 +139,7 @@ type
     FMax: int64;
     FMetadata: TJSONArray;
     FRows: TJSONArray;
+    FRowsCount: int64;
     FRowsAffected: int64;
   protected
     function RequestStatement: string;
@@ -339,6 +340,8 @@ begin
           Merge(FRows, VResponse.Path('content.rows'));
           {$EndIf}
         end;
+        FRowsCount:=FRows.Count;
+        //WriteLn(FRows.Stringify());
       end
       else
       begin
@@ -354,7 +357,7 @@ constructor TRSQLCursor.Create(const AConn: TRSQLClient);
 begin
   inherited Create;
   FConnection := AConn;
-  FMax := 100;
+  FMax := 500;
 end;
 
 destructor TRSQLCursor.Destroy;
@@ -384,7 +387,7 @@ begin
     RequestNextPack;
   end;
   {$IfEnd}
-  Result := (Assigned(FRows)) and (FRows.Count > FIndex);
+  Result := FRowsCount > FIndex;//(Assigned(FRows)) and (FRows.Count > FIndex);
   if (Result) then
   begin
     Inc(FStatus);
