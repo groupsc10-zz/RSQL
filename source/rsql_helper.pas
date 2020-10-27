@@ -675,17 +675,33 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
         Result.Add(ExtractRow);
         Next;
       end;
-      {$Else}  
-      if (ARecno < 1) then
+      {$Else}
+      if APacketRecords > 0 then
       begin
-        ARecno := 1;
-      end;
-      RecNo := ARecno; 
-      while not(EOF) or (RecNo < (ARecno + APacketRecords)) do
+        ARecno:=ARecno+1;
+
+        if (ARecno < 1) then
+        begin
+          ARecno := 1;
+        end;
+
+        RecNo := ARecno;
+        while not(EOF) and (RecNo < (ARecno + APacketRecords)) do
+        begin
+          Result.Add(ExtractRow);
+          Next;
+        end;
+      end
+      else
       begin
-        Result.Add(ExtractRow);
-        Next;
+        First;
+        while not EOF do
+        begin
+          Result.Add(ExtractRow);
+          Next;
+        end;
       end;
+
       {$EndIf}
     finally
       EnableControls;
