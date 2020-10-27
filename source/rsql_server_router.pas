@@ -667,8 +667,8 @@ begin
           FResponse.Envelop(200, VQuery.SaveToJSON);
           {$Else}
           FResponse.Envelop(200, VQuery.SaveToJSON(
-            FContent.Path('options.recno', 1),
-            FContent.Path('options.packetrecords', 100)));
+            FContent.Path('options.recno', 0),
+            FContent.Path('options.packetrecords', -1)));
           {$EndIf}
         except
           raise
