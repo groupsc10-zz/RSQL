@@ -410,22 +410,24 @@ begin
               'number':
               begin
                 VParam.AsFloat := VJSONData.Path('value', 0);
+                VParam.Precision:=VJSONData.Path('precision', 0);
               end;
               'currency':
               begin
-                VParam.AsCurrency := VJSONData.Path('value', 0);
+                VParam.AsCurrency := VJSONData.Path('value', 0.0);
+                VParam.Precision:=VJSONData.Path('precision', 0);
               end;
               'datetime':
               begin
-                VParam.AsDateTime := VJSONData.Path('value', 0);
+                VParam.AsDateTime := VJSONData.Path('value', 0.0);
               end;
               'date':
               begin
-                VParam.AsDate := VJSONData.Path('value', 0);
+                VParam.AsDate := VJSONData.Path('value', 0.0);
               end;
               'time':
               begin
-                VParam.AsTime := VJSONData.Path('value', 0);
+                VParam.AsTime := VJSONData.Path('value', 0.0);
               end;
               else
               begin
@@ -438,8 +440,10 @@ begin
                 begin
                   VParam.AsString := VJSONData.Path('value', EmptyStr);
                 end;
+                //VParam.Precision:=VJSONData.Path('precision', 0);
               end;
             end;
+            //VParam.Size:=VJSONData.Path('size', 0);
           end;
           else
           begin
@@ -510,12 +514,25 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
           begin
             VColumn.Add('type', 'integer');
           end;
-          ftFloat,
+          ftFloat:
+          begin
+            VColumn.Add('type', 'number');
+            VPrecision := VField.Precision;
+            if (VPrecision > 0) then
+            begin
+              VColumn.Add('precision', VPrecision);
+            end;
+            VSize := VField.Size;
+            if (VSize > 0) then
+            begin
+              VColumn.Add('length', VSize);
+            end;
+          end;
           ftCurrency,
           ftBCD,
           ftFMTBcd:
           begin
-            VColumn.Add('type', 'number');
+            VColumn.Add('type', 'currency');
             VPrecision := VField.Precision;
             if (VPrecision > 0) then
             begin
@@ -605,7 +622,7 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
             ftFixedWideChar,
             ftGuid:
             begin
-              Result.Add(VField.AsString);
+              Result.Add(UTF8Decode(VField.AsString));
             end;
             ftBoolean:
             begin
@@ -666,6 +683,8 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
   {$EndIf}
   begin
     Result := TJSONArray.Create();
+    if IsEmpty then
+      Exit;
     try
       DisableControls;
       {$IfNDef rsql_experimental}
@@ -685,10 +704,15 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
           ARecno := 1;
         end;
 
-        RecNo := ARecno;
+        //WriteLn('RECORDCOUNT ',RecordCount);
+        //if (ARecno-1) > RecordCount then
+          //Exit;
+
+        //RecNo := ARecno;
         while not(EOF) and (RecNo < (ARecno + APacketRecords)) do
         begin
-          Result.Add(ExtractRow);
+          if not (RecNo < ARecno) then
+            Result.Add(ExtractRow);
           Next;
         end;
       end
@@ -718,7 +742,7 @@ begin
   begin
     {$IfNDef rsql_experimental}
     Result.Add('rows', ExtractRows);
-    {$Else}                                                
+    {$Else}
     Result.Add('rows', ExtractRows(ARecno, APacketRecords));
     {$EndIf}
     Result.Add('rowsaffected', RowsAffected);

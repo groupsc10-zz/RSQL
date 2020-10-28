@@ -196,7 +196,7 @@ function TRSQLCursor.RequestStatement: string;
             Add('value', AParam.AsCurrency);
             Add('type', 'currency');
             Add('length', AParam.Size);
-            Add('type', AParam.Precision);
+            Add('precision', AParam.Precision);
           end;
         end;
         ftBoolean:
@@ -328,20 +328,22 @@ begin
     try
       if (VResponse.Path('success', False)) then
       begin
-        if (not (Assigned(FRows))) then
+        if  FStatementType = stSelect then
         begin
-          FMetadata := TJSONArray(VResponse.Path('content.metadata').Clone);
-          FRows := TJSONArray(VResponse.Path('content.rows').Clone);
-          FRowsAffected := VResponse.Path('content.rowsaffected', -1);
-        end
-        else
-        begin
-          {$IfDef rsql_experimental}
-          Merge(FRows, VResponse.Path('content.rows'));
-          {$EndIf}
+          if (not (Assigned(FRows))) then
+          begin
+            FMetadata := TJSONArray(VResponse.Path('content.metadata').Clone);
+            FRows := TJSONArray(VResponse.Path('content.rows').Clone);
+          end
+          else
+          begin
+            {$IfDef rsql_experimental}
+            Merge(FRows, VResponse.Path('content.rows'));
+            {$EndIf}
+          end;
+          FRowsCount:=FRows.Count;
         end;
-        FRowsCount:=FRows.Count;
-        //WriteLn(FRows.Stringify());
+        FRowsAffected := VResponse.Path('content.rowsaffected', -1);
       end
       else
       begin
@@ -362,8 +364,10 @@ end;
 
 destructor TRSQLCursor.Destroy;
 begin
-  FreeAndNil(FMetadata);
-  FreeAndNil(FRows);
+  if Assigned(FMetadata) then
+    FreeAndNil(FMetadata);
+  if Assigned(FRows) then
+    FreeAndNil(FRows);
   inherited Destroy;
 end;
 
@@ -609,6 +613,7 @@ begin
           'boolean': VType := ftBoolean;
           'integer': VType := ftLargeint;
           'number': VType := ftFloat;
+          'currency': VType := ftBCD;
           'datetime': VType := ftDateTime;
           'date': VType := ftDate;
           'time': VType := ftTime;
@@ -695,12 +700,12 @@ begin
         begin
           PInt64(ABuffer)^ := VData.AsInt64;
         end;
-        ftBCD:
+        ftBCD,
+        ftCurrency:
         begin
           PCurrency(ABuffer)^ := FloattoCurr(VData.AsFloat);
         end;
-        ftFloat,
-        ftCurrency:
+        ftFloat:
         begin
           pdouble(ABuffer)^ := VData.AsFloat;
         end;
