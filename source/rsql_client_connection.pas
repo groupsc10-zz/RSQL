@@ -615,6 +615,7 @@ begin
         VReadonly := VData.Path('readonly', False);
         VHidden := VData.Path('hidden', False);   
         VFixed := VData.Path('fixed', False);
+
         case (LowerCase(VData.Path('type', EmptyStr))) of
           'string': VType := ftString;
           'smallint': VType := ftSmallint;
@@ -626,7 +627,7 @@ begin
           'bcd': VType := ftBCD;
           'date': VType := ftDate;
           'time': VType := ftTime;
-          'daterime': VType := ftDateTime;
+          'datetime': VType := ftDateTime;
           'bytes': VType := ftBytes;
           'varbytes': VType := ftVarBytes;
           'autoinc': VType := ftAutoInc;
@@ -644,7 +645,7 @@ begin
           'adt': VType := ftADT;
           'array': VType := ftArray;
           'reference': VType := ftReference;
-          'dataSet': VType := ftDataSet;
+          'dataset': VType := ftDataSet;
           'orablob': VType := ftOraBlob;
           'oraclob': VType := ftOraClob;
           'variant': VType := ftVariant;
@@ -736,11 +737,11 @@ begin
         begin
           PInt64(ABuffer)^ := VData.AsInt64;
         end;
-        ftBCD,
         ftFmtBCD:
         begin
-          pBCD(ABuffer)^ := DoubleToBCD(VData.AsFloat);
+          pBCD(ABuffer)^ := CurrToBCD(VData.AsFloat);
         end;
+        ftBCD,
         ftCurrency:
         begin
           PCurrency(ABuffer)^ := FloattoCurr(VData.AsFloat);
