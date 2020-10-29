@@ -597,7 +597,8 @@ var
   VPrecision: integer;
   VRequired: boolean;
   VReadonly: boolean;
-  VHidden: boolean;
+  VHidden: boolean; 
+  VFixed: boolean;
 begin
   VMetadata := VCursor.Metadata;
   if (Assigned(VMetadata)) then
@@ -607,25 +608,56 @@ begin
       VData := VMetadata[VIndex];
       if (Assigned(VData)) then
       begin
-        case (LowerCase(VData.Path('type', EmptyStr))) of
-          'string': VType := ftString;
-          'widestring': VType := ftWideString;
-          'boolean': VType := ftBoolean;
-          'integer': VType := ftLargeint;
-          'number': VType := ftFloat;
-          'currency': VType := ftBCD;
-          'datetime': VType := ftDateTime;
-          'date': VType := ftDate;
-          'time': VType := ftTime;
-          'blob': VType := ftBlob;
-          'unknown': VType := ftUnknown;
-        end;
         VName := VData.Path('name', EmptyStr);
         VLength := VData.Path('length', 0);
         VPrecision := VData.Path('precision', 0);
         VRequired := VData.Path('required', False);
         VReadonly := VData.Path('readonly', False);
-        VHidden := VData.Path('hidden', False);
+        VHidden := VData.Path('hidden', False);   
+        VFixed := VData.Path('fixed', False);
+        case (LowerCase(VData.Path('type', EmptyStr))) of
+          'string': VType := ftString;
+          'smallint': VType := ftSmallint;
+          'integer': VType := ftInteger;
+          'word': VType := ftWord;
+          'boolean': VType := ftBoolean;
+          'float': VType := ftFloat;
+          'currency': VType := ftCurrency;
+          'bcd': VType := ftBCD;
+          'date': VType := ftDate;
+          'time': VType := ftTime;
+          'daterime': VType := ftDateTime;
+          'bytes': VType := ftBytes;
+          'varbytes': VType := ftVarBytes;
+          'autoinc': VType := ftAutoInc;
+          'blob': VType := ftBlob;
+          'memo': VType := ftMemo;
+          'graphic': VType := ftGraphic;
+          'fmtmemo': VType := ftFmtMemo;
+          'paradoxole': VType := ftParadoxOle;
+          'dbaseole': VType := ftDBaseOle;
+          'typedbinary': VType := ftTypedBinary;
+          'cursor': VType := ftCursor;
+          'fixedchar': VType := ftFixedChar;
+          'widestring': VType := ftWideString;
+          'largeint': VType := ftLargeint;
+          'adt': VType := ftADT;
+          'array': VType := ftArray;
+          'reference': VType := ftReference;
+          'dataSet': VType := ftDataSet;
+          'orablob': VType := ftOraBlob;
+          'oraclob': VType := ftOraClob;
+          'variant': VType := ftVariant;
+          'interface': VType := ftInterface;
+          'idispatch': VType := ftIDispatch;
+          'guid': VType := ftGuid;
+          'timestamp': VType := ftTimeStamp;
+          'fmtbcd': VType := ftFMTBcd;
+          'fixedwidechar': VType := ftFixedWideChar;
+          'widememo': VType := ftWideMemo;
+          else VType := ftUnknown;
+        end;
+
         /// Add field
         with AFieldDefs.AddFieldDef do
         begin
@@ -641,6 +673,10 @@ begin
           if (VHidden) then
           begin
             Attributes := Attributes + [faHiddenCol];
+          end;   
+          if (VFixed) then
+          begin
+            Attributes := Attributes + [faFixed];
           end;
         end;
       end;
@@ -659,8 +695,8 @@ function TRSQLClient.LoadField(ACursor: TSQLCursor; AFieldDef: TFieldDef;
   ABuffer: pointer; out ACreateBlob: boolean): boolean;
 var
   VCursor: TRSQLCursor absolute ACursor;
-  VIndexCol: int64;
-  VIndexRow: int64;
+  VIndexCol: Integer;
+  VIndexRow: Int64;
   VRows: TJSONArray;
   VRow: TJSONArray;
   VData: TJSONData;
@@ -701,6 +737,10 @@ begin
           PInt64(ABuffer)^ := VData.AsInt64;
         end;
         ftBCD,
+        ftFmtBCD:
+        begin
+          pBCD(ABuffer)^ := DoubleToBCD(VData.AsFloat);
+        end;
         ftCurrency:
         begin
           PCurrency(ABuffer)^ := FloattoCurr(VData.AsFloat);
@@ -729,10 +769,6 @@ begin
             Move(PChar(VData.AsString)^, ABuffer^, Length(VData.AsString));
           end;
           PAnsiChar(ABuffer + Length(VData.AsString))^ := #0;
-        end;
-        ftFmtBCD:
-        begin
-          pBCD(ABuffer)^ := CurrToBCD(VData.AsFloat);
         end;
         ftFixedWideChar,
         ftWideString:
@@ -763,7 +799,7 @@ procedure TRSQLClient.LoadBlobIntoBuffer(AFieldDef: TFieldDef;
   ABlobBuf: PBufBlobField; ACursor: TSQLCursor; ATransaction: TSQLTransaction);
 var
   VCursor: TRSQLCursor absolute ACursor;
-  VIndexCol: int64;
+  VIndexCol: Integer;
   VIndexRow: int64;
   VRows: TJSONArray;
   VRow: TJSONArray;

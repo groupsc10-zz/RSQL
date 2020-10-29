@@ -460,8 +460,7 @@ end;
 {$IfNDef rsql_experimental}
 function TSQLQueryHelper.SaveToJSON: TJSONObject;
 {$Else}                                                                              
-function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
-  ): TJSONObject;
+function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64): TJSONObject;
 {$EndIf}
 
   function ExtractMetadata: TJSONArray;
@@ -469,8 +468,6 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
     VIndex: integer;
     VField: TFieldDef;
     VColumn: TJSONObject;
-    VSize: integer;
-    VPrecision: integer;
   begin
     Result := TJSONArray.Create([]);
     for VIndex := 0 to (FieldDefs.Count - 1) do
@@ -480,119 +477,13 @@ function TSQLQueryHelper.SaveToJSON(const ARecno, APacketRecords: Int64
       begin
         VColumn := TJSONObject.Create([]);
         VColumn.Add('name', VField.Name);
-        case VField.DataType of
-          ftString,
-          ftFixedChar,
-          ftGuid:
-          begin
-            VColumn.Add('type', 'string');
-            VSize := VField.Size;
-            if (VSize > 0) then
-            begin
-              VColumn.Add('length', VSize);
-            end;
-          end;
-          ftWideString,
-          ftFixedWideChar:
-          begin
-            VColumn.Add('type', 'widestring');
-            VSize := VField.Size;
-            if (VSize > 0) then
-            begin
-              VColumn.Add('length', VSize);
-            end;
-          end;
-          ftBoolean:
-          begin
-            VColumn.Add('type', 'boolean');
-          end;
-          ftInteger,
-          ftLargeint,
-          ftSmallint,
-          ftWord,
-          ftAutoInc:
-          begin
-            VColumn.Add('type', 'integer');
-          end;
-          ftFloat:
-          begin
-            VColumn.Add('type', 'number');
-            VPrecision := VField.Precision;
-            if (VPrecision > 0) then
-            begin
-              VColumn.Add('precision', VPrecision);
-            end;
-            VSize := VField.Size;
-            if (VSize > 0) then
-            begin
-              VColumn.Add('length', VSize);
-            end;
-          end;
-          ftCurrency,
-          ftBCD,
-          ftFMTBcd:
-          begin
-            VColumn.Add('type', 'currency');
-            VPrecision := VField.Precision;
-            if (VPrecision > 0) then
-            begin
-              VColumn.Add('precision', VPrecision);
-            end;
-            VSize := VField.Size;
-            if (VSize > 0) then
-            begin
-              VColumn.Add('length', VSize);
-            end;
-          end;
-          ftDateTime,
-          ftTimeStamp:
-          begin
-            VColumn.Add('type', 'datetime');
-          end;
-          ftDate:
-          begin
-            VColumn.Add('type', 'date');
-          end;
-          ftTime:
-          begin
-            VColumn.Add('type', 'time');
-          end;
-          ftBlob,
-          ftBytes,
-          ftGraphic,
-          ftVarBytes,
-          ftMemo,
-          ftWideMemo,
-          ftTypedBinary:
-          begin
-            VColumn.Add('type', 'blob');
-            VSize := VField.Size;
-            if (VSize > 0) then
-            begin
-              VColumn.Add('length', VSize);
-            end;
-          end;
-          else
-          begin
-            VColumn.Add('type', 'unknown');
-          end;
-        end;
-        if (faRequired in VField.Attributes) then
-        begin
-          VColumn.Add('required', True);
-        end;
-        if (faReadonly in VField.Attributes) then
-        begin
-          VColumn.Add('readonly', True);
-        end;
-        if (faHiddenCol in VField.Attributes) then
-        begin
-          VColumn.Add('hidden', True);
-        end;
-        if (faFixed in VField.Attributes) then
-        begin
-          VColumn.Add('fixed', True);
-        end;
+        VColumn.Add('type', Fieldtypenames[VField.DataType]);
+        VColumn.Add('length', VField.Size);
+        VColumn.Add('precision', VField.Precision);  
+        VColumn.Add('required', faRequired in VField.Attributes);
+        VColumn.Add('readonly', faReadonly in VField.Attributes);
+        VColumn.Add('hidden', faHiddenCol in VField.Attributes);
+        VColumn.Add('fixed', faFixed in VField.Attributes);
         Result.Add(VColumn);
       end;
     end;
